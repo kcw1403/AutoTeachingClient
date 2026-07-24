@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using RobotControllerClient.Communication;
+using RobotControllerClient.Controls;
 using RobotControllerClient.Cycle;
 using RobotControllerClient.Logging;
 using RobotControllerClient.Protocol;
@@ -187,6 +188,8 @@ namespace RobotControllerClient.Forms
 
         private void ShowResultSummary(CommandResult result)
         {
+            UpdateTeachChart(result);
+
             switch (result.Status)
             {
                 case ResultStatus.Success:
@@ -204,6 +207,27 @@ namespace RobotControllerClient.Forms
                 case ResultStatus.NotConnected:
                     SetStatus("연결 끊김");
                     break;
+            }
+        }
+
+        private void UpdateTeachChart(CommandResult result)
+        {
+            if (result == null || result.Responses == null)
+            {
+                return;
+            }
+
+            foreach (string line in result.Responses)
+            {
+                TeachDiffer differ;
+                if (TeachDiffer.TryParse(line, out differ))
+                {
+                    teachChart.SetData(differ);
+                    AppendLog(LogDirection.Info, string.Format(
+                        "TEACH_DIFFER 수신 - 편차 X:{0:0.000} Y:{1:0.000} Z:{2:0.000}",
+                        differ.DeviationX, differ.DeviationY, differ.DeviationZ));
+                    return;
+                }
             }
         }
 

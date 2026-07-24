@@ -114,6 +114,16 @@ namespace RobotControllerClient.Protocol
                     new CommandParameter("arm", "픽업 암", "A", ArmChoices)
                 });
 
+            Add("WAFEREYETEACH", "WAFEREYETEACH (오토티칭)", CommandKind.Action,
+                "지정된 스테이션/슬롯에서 Auto Teaching을 수행하고, 원래 위치와 티칭된 위치의 편차(TEACH_DIFFER)를 회신한다.",
+                "WAFEREYETEACH {station} SLOT {slot} ARM {arm}",
+                new List<CommandParameter>
+                {
+                    new CommandParameter("station", "스테이션 번호 (1~16)", "1"),
+                    new CommandParameter("slot", "슬롯 번호", "1"),
+                    new CommandParameter("arm", "티칭 암", "A", ArmChoices)
+                });
+
             Add("PLACE", "PLACE (웨이퍼 놓기)", CommandKind.Action,
                 "지정된 스테이션/슬롯에 웨이퍼를 놓는다.",
                 "PLACE {station} SLOT {slot} ARM {arm}",

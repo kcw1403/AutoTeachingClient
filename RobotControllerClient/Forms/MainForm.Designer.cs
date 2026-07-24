@@ -41,6 +41,9 @@ namespace RobotControllerClient.Forms
             this.chkStopOnError = new System.Windows.Forms.CheckBox();
             this.numIterations = new System.Windows.Forms.NumericUpDown();
             this.lblIterations = new System.Windows.Forms.Label();
+            this.rightSplit = new System.Windows.Forms.SplitContainer();
+            this.grpTeach = new System.Windows.Forms.GroupBox();
+            this.teachChart = new RobotControllerClient.Controls.TeachDiffChart();
             this.grpLog = new System.Windows.Forms.GroupBox();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.pnlLogBottom = new System.Windows.Forms.Panel();
@@ -65,6 +68,11 @@ namespace RobotControllerClient.Forms
             this.pnlCycleTop.SuspendLayout();
             this.pnlCycleBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numIterations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.rightSplit)).BeginInit();
+            this.rightSplit.Panel1.SuspendLayout();
+            this.rightSplit.Panel2.SuspendLayout();
+            this.rightSplit.SuspendLayout();
+            this.grpTeach.SuspendLayout();
             this.grpLog.SuspendLayout();
             this.pnlLogBottom.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -167,11 +175,50 @@ namespace RobotControllerClient.Forms
             //
             // mainSplit.Panel2
             //
-            this.mainSplit.Panel2.Controls.Add(this.grpLog);
+            this.mainSplit.Panel2.Controls.Add(this.rightSplit);
             this.mainSplit.Panel2MinSize = 300;
-            this.mainSplit.Size = new System.Drawing.Size(1008, 665);
-            this.mainSplit.SplitterDistance = 560;
+            this.mainSplit.Size = new System.Drawing.Size(1288, 665);
+            this.mainSplit.SplitterDistance = 520;
             this.mainSplit.TabIndex = 1;
+            //
+            // rightSplit
+            //
+            this.rightSplit.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rightSplit.Location = new System.Drawing.Point(0, 0);
+            this.rightSplit.Name = "rightSplit";
+            //
+            // rightSplit.Panel1
+            //
+            this.rightSplit.Panel1.Controls.Add(this.grpLog);
+            this.rightSplit.Panel1MinSize = 320;
+            //
+            // rightSplit.Panel2
+            //
+            this.rightSplit.Panel2.Controls.Add(this.grpTeach);
+            this.rightSplit.Panel2MinSize = 280;
+            this.rightSplit.Size = new System.Drawing.Size(764, 665);
+            this.rightSplit.SplitterDistance = 430;
+            this.rightSplit.TabIndex = 0;
+            //
+            // grpTeach
+            //
+            this.grpTeach.Controls.Add(this.teachChart);
+            this.grpTeach.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.grpTeach.Location = new System.Drawing.Point(0, 0);
+            this.grpTeach.Name = "grpTeach";
+            this.grpTeach.Padding = new System.Windows.Forms.Padding(6);
+            this.grpTeach.Size = new System.Drawing.Size(330, 665);
+            this.grpTeach.TabIndex = 0;
+            this.grpTeach.TabStop = false;
+            this.grpTeach.Text = "티칭 편차 (XYZ 위치 · 편차)";
+            //
+            // teachChart
+            //
+            this.teachChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.teachChart.Location = new System.Drawing.Point(6, 18);
+            this.teachChart.Name = "teachChart";
+            this.teachChart.Size = new System.Drawing.Size(318, 641);
+            this.teachChart.TabIndex = 0;
             //
             // leftSplit
             //
@@ -486,12 +533,12 @@ namespace RobotControllerClient.Forms
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 751);
+            this.ClientSize = new System.Drawing.Size(1288, 751);
             this.Controls.Add(this.mainSplit);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.grpConnection);
             this.Font = new System.Drawing.Font("굴림", 9F);
-            this.MinimumSize = new System.Drawing.Size(900, 600);
+            this.MinimumSize = new System.Drawing.Size(1120, 640);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Robot Controller Client - QUADRA 5 Axis";
@@ -512,6 +559,11 @@ namespace RobotControllerClient.Forms
             this.pnlCycleBottom.ResumeLayout(false);
             this.pnlCycleBottom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numIterations)).EndInit();
+            this.rightSplit.Panel1.ResumeLayout(false);
+            this.rightSplit.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.rightSplit)).EndInit();
+            this.rightSplit.ResumeLayout(false);
+            this.grpTeach.ResumeLayout(false);
             this.grpLog.ResumeLayout(false);
             this.pnlLogBottom.ResumeLayout(false);
             this.pnlLogBottom.PerformLayout();
@@ -547,6 +599,9 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.CheckBox chkStopOnError;
         private System.Windows.Forms.Button btnCycleStart;
         private System.Windows.Forms.Button btnCycleStop;
+        private System.Windows.Forms.SplitContainer rightSplit;
+        private System.Windows.Forms.GroupBox grpTeach;
+        private RobotControllerClient.Controls.TeachDiffChart teachChart;
         private System.Windows.Forms.GroupBox grpLog;
         private System.Windows.Forms.ListBox lstLog;
         private System.Windows.Forms.Panel pnlLogBottom;

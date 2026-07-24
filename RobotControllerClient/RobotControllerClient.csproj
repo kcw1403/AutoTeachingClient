@@ -46,6 +46,10 @@
     <Compile Include="Protocol\RobotProtocol.cs" />
     <Compile Include="Protocol\CommandDefinition.cs" />
     <Compile Include="Protocol\ErrorCodes.cs" />
+    <Compile Include="Protocol\TeachDiffer.cs" />
+    <Compile Include="Controls\TeachDiffChart.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Communication\RobotClient.cs" />
     <Compile Include="Communication\CommandResult.cs" />
     <Compile Include="Logging\CommLogger.cs" />
