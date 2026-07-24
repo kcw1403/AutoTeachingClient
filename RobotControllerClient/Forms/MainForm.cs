@@ -103,6 +103,12 @@ namespace RobotControllerClient.Forms
 
         private void AskAddToCycleOrSend(CommandDefinition def, string commandText)
         {
+            if (def.Id == CommandCatalog.DelayCommandId)
+            {
+                AddStepToCycle(def.Id, commandText);
+                return;
+            }
+
             DialogResult choice = MessageBox.Show(
                 this,
                 string.Format("명령: {0}\n\n[예] 사이클에 추가\n[아니오] 지금 바로 전송\n[취소] 취소", commandText),
@@ -122,53 +128,31 @@ namespace RobotControllerClient.Forms
 
         private void AddStepToCycle(string commandId, string commandText)
         {
-            int delay = PromptDelay();
-            if (delay < 0)
+            CycleStep step;
+            if (commandId == CommandCatalog.DelayCommandId)
             {
-                return;
+                step = new CycleStep(commandId, commandText, ParseDelayMs(commandText), true);
             }
-            CycleStep step = new CycleStep(commandId, commandText, delay);
+            else
+            {
+                step = new CycleStep(commandId, commandText);
+            }
             _steps.Add(step);
             lstCycle.Items.Add(step);
         }
 
-        private int PromptDelay()
+        private static int ParseDelayMs(string commandText)
         {
-            using (Form form = new Form())
+            string[] parts = (commandText ?? string.Empty)
+                .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            int ms;
+            if (parts.Length >= 2 &&
+                int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out ms) &&
+                ms >= 0)
             {
-                form.Text = "동작 후 딜레이";
-                form.FormBorderStyle = FormBorderStyle.FixedDialog;
-                form.StartPosition = FormStartPosition.CenterParent;
-                form.MinimizeBox = false;
-                form.MaximizeBox = false;
-                form.ClientSize = new Size(280, 110);
-
-                Label label = new Label { Text = "다음 동작까지 대기 시간 (ms)", Left = 12, Top = 15, Width = 250 };
-                NumericUpDown num = new NumericUpDown
-                {
-                    Left = 12,
-                    Top = 40,
-                    Width = 120,
-                    Maximum = 3600000,
-                    Minimum = 0,
-                    Value = 500
-                };
-                Button ok = new Button { Text = "확인", Left = 112, Top = 75, Width = 70, DialogResult = DialogResult.OK };
-                Button cancel = new Button { Text = "취소", Left = 190, Top = 75, Width = 70, DialogResult = DialogResult.Cancel };
-
-                form.Controls.Add(label);
-                form.Controls.Add(num);
-                form.Controls.Add(ok);
-                form.Controls.Add(cancel);
-                form.AcceptButton = ok;
-                form.CancelButton = cancel;
-
-                if (form.ShowDialog(this) == DialogResult.OK)
-                {
-                    return (int)num.Value;
-                }
-                return -1;
+                return ms;
             }
+            return 0;
         }
 
         private void SendOnce(string commandText)

@@ -77,11 +77,21 @@ namespace RobotControllerClient.Protocol
         private static readonly string[] RadialChoices = { "EX", "RE", "EX_G", "EX_P" };
         private static readonly string[] UpDnChoices = { "UP", "DN" };
 
+        public const string DelayCommandId = "DELAY";
+
         public static List<CommandDefinition> All { get; private set; }
 
         static CommandCatalog()
         {
             All = new List<CommandDefinition>();
+
+            Add("DELAY", "DELAY (사이클 대기)", CommandKind.Action,
+                "로봇으로 전송하지 않고 사이클 진행 중 지정한 시간(ms)만큼 대기하는 스텝. 명령 사이의 딜레이를 스텝으로 넣을 때 사용한다.",
+                "DELAY {ms}",
+                new List<CommandParameter>
+                {
+                    new CommandParameter("ms", "대기 시간 (ms)", "500")
+                });
 
             Add("HLLO", "HLLO (통신확인)", CommandKind.Action,
                 "Robot이 통신에 반응하는지 확인하는 비개입 명령. 회신: Hello", "HLLO");

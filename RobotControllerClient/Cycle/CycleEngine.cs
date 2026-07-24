@@ -101,6 +101,17 @@ namespace RobotControllerClient.Cycle
 
                         RaiseStepStarted(iteration, total, i, step);
 
+                        if (step.IsDelay)
+                        {
+                            if (step.DelayAfterMs > 0 && token.WaitHandle.WaitOne(step.DelayAfterMs))
+                            {
+                                stopReason = "사용자에 의해 중지됨";
+                                RaiseStopped(stopReason);
+                                return;
+                            }
+                            continue;
+                        }
+
                         CommandResult result = _client.SendCommand(step.CommandText, token);
 
                         RaiseStepFinished(iteration, total, i, step, result);
