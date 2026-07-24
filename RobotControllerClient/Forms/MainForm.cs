@@ -336,11 +336,35 @@ namespace RobotControllerClient.Forms
                 return;
             }
 
+            int startIndex = 0;
+            int selected = lstCycle.SelectedIndex;
+            if (selected > 0)
+            {
+                DialogResult choice = MessageBox.Show(
+                    this,
+                    string.Format("선택된 스텝: {0}/{1}\n\n[예] 선택된 스텝부터 구동\n[아니오] 처음부터 구동\n[취소] 취소",
+                        selected + 1, _steps.Count),
+                    "사이클 시작 위치",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (choice == DialogResult.Cancel)
+                {
+                    return;
+                }
+                if (choice == DialogResult.Yes)
+                {
+                    startIndex = selected;
+                }
+            }
+
             try
             {
-                _cycle.Start(_steps, (int)numIterations.Value, chkInfinite.Checked, chkStopOnError.Checked);
+                _cycle.Start(_steps, (int)numIterations.Value, chkInfinite.Checked, chkStopOnError.Checked, startIndex);
                 SetCycleRunningUi(true);
-                AppendLog(LogDirection.Info, "사이클 시작");
+                AppendLog(LogDirection.Info, startIndex > 0
+                    ? string.Format("사이클 시작 (스텝 {0}부터)", startIndex + 1)
+                    : "사이클 시작");
             }
             catch (Exception ex)
             {

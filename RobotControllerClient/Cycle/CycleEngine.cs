@@ -37,6 +37,11 @@ namespace RobotControllerClient.Cycle
 
         public void Start(IList<CycleStep> steps, int iterations, bool infinite, bool stopOnError)
         {
+            Start(steps, iterations, infinite, stopOnError, 0);
+        }
+
+        public void Start(IList<CycleStep> steps, int iterations, bool infinite, bool stopOnError, int startIndex)
+        {
             if (IsRunning)
             {
                 throw new InvalidOperationException("사이클이 이미 실행 중입니다.");
@@ -52,10 +57,16 @@ namespace RobotControllerClient.Cycle
                 snapshot.Add(s.Clone());
             }
 
+            int firstStart = startIndex;
+            if (firstStart < 0 || firstStart >= snapshot.Count)
+            {
+                firstStart = 0;
+            }
+
             _cts = new CancellationTokenSource();
             CancellationToken token = _cts.Token;
 
-            _thread = new Thread(() => Run(snapshot, iterations, infinite, stopOnError, token))
+            _thread = new Thread(() => Run(snapshot, iterations, infinite, stopOnError, firstStart, token))
             {
                 IsBackground = true,
                 Name = "CycleEngine"
@@ -71,7 +82,7 @@ namespace RobotControllerClient.Cycle
             }
         }
 
-        private void Run(List<CycleStep> steps, int iterations, bool infinite, bool stopOnError, CancellationToken token)
+        private void Run(List<CycleStep> steps, int iterations, bool infinite, bool stopOnError, int firstStart, CancellationToken token)
         {
             string stopReason = "사이클 정상 종료";
             try
@@ -88,7 +99,8 @@ namespace RobotControllerClient.Cycle
                     iteration++;
                     int total = infinite ? 0 : iterations;
 
-                    for (int i = 0; i < steps.Count; i++)
+                    int start = iteration == 1 ? firstStart : 0;
+                    for (int i = start; i < steps.Count; i++)
                     {
                         if (token.IsCancellationRequested)
                         {
