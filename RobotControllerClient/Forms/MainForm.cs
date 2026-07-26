@@ -318,6 +318,72 @@ namespace RobotControllerClient.Forms
             lstCycle.Items.Clear();
         }
 
+        private void btnCycleSave_Click(object sender, EventArgs e)
+        {
+            if (_steps.Count == 0)
+            {
+                MessageBox.Show(this, "저장할 사이클이 없습니다.", "저장 불가", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Filter = CycleFile.FileDialogFilter;
+                dialog.DefaultExt = CycleFile.Extension;
+                dialog.AddExtension = true;
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    CycleFile.Save(dialog.FileName, _steps);
+                    AppendLog(LogDirection.Info, string.Format("사이클 저장: {0}", dialog.FileName));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message, "저장 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnCycleLoad_Click(object sender, EventArgs e)
+        {
+            if (_cycle.IsRunning)
+            {
+                MessageBox.Show(this, "사이클 실행 중에는 불러올 수 없습니다.", "불러오기 불가", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = CycleFile.FileDialogFilter;
+                dialog.DefaultExt = CycleFile.Extension;
+                if (dialog.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                try
+                {
+                    List<CycleStep> loaded = CycleFile.Load(dialog.FileName);
+                    _steps.Clear();
+                    lstCycle.Items.Clear();
+                    foreach (CycleStep step in loaded)
+                    {
+                        _steps.Add(step);
+                        lstCycle.Items.Add(step);
+                    }
+                    AppendLog(LogDirection.Info, string.Format("사이클 불러오기: {0} ({1}개 스텝)", dialog.FileName, loaded.Count));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(this, ex.Message, "불러오기 오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         private void chkInfinite_CheckedChanged(object sender, EventArgs e)
         {
             numIterations.Enabled = !chkInfinite.Checked;
@@ -563,6 +629,8 @@ namespace RobotControllerClient.Forms
             btnCycleUp.Enabled = !running;
             btnCycleDown.Enabled = !running;
             btnCycleClear.Enabled = !running;
+            btnCycleSave.Enabled = !running;
+            btnCycleLoad.Enabled = !running;
             numIterations.Enabled = !running && !chkInfinite.Checked;
             chkInfinite.Enabled = !running;
             chkStopOnError.Enabled = !running;

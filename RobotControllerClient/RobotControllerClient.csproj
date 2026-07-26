@@ -55,6 +55,7 @@
     <Compile Include="Logging\CommLogger.cs" />
     <Compile Include="Cycle\CycleStep.cs" />
     <Compile Include="Cycle\CycleEngine.cs" />
+    <Compile Include="Cycle\CycleFile.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

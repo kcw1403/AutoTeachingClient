@@ -30,6 +30,8 @@ namespace RobotControllerClient.Forms
             this.grpCycle = new System.Windows.Forms.GroupBox();
             this.lstCycle = new System.Windows.Forms.ListBox();
             this.pnlCycleTop = new System.Windows.Forms.Panel();
+            this.btnCycleSave = new System.Windows.Forms.Button();
+            this.btnCycleLoad = new System.Windows.Forms.Button();
             this.btnCycleClear = new System.Windows.Forms.Button();
             this.btnCycleDown = new System.Windows.Forms.Button();
             this.btnCycleUp = new System.Windows.Forms.Button();
@@ -295,10 +297,12 @@ namespace RobotControllerClient.Forms
             this.pnlCycleTop.Controls.Add(this.btnCycleDown);
             this.pnlCycleTop.Controls.Add(this.btnCycleUp);
             this.pnlCycleTop.Controls.Add(this.btnCycleRemove);
+            this.pnlCycleTop.Controls.Add(this.btnCycleSave);
+            this.pnlCycleTop.Controls.Add(this.btnCycleLoad);
             this.pnlCycleTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlCycleTop.Location = new System.Drawing.Point(6, 18);
             this.pnlCycleTop.Name = "pnlCycleTop";
-            this.pnlCycleTop.Size = new System.Drawing.Size(548, 32);
+            this.pnlCycleTop.Size = new System.Drawing.Size(548, 64);
             this.pnlCycleTop.TabIndex = 0;
             //
             // btnCycleClear
@@ -310,6 +314,26 @@ namespace RobotControllerClient.Forms
             this.btnCycleClear.Text = "전체 삭제";
             this.btnCycleClear.UseVisualStyleBackColor = true;
             this.btnCycleClear.Click += new System.EventHandler(this.btnCycleClear_Click);
+            //
+            // btnCycleSave
+            //
+            this.btnCycleSave.Location = new System.Drawing.Point(6, 33);
+            this.btnCycleSave.Name = "btnCycleSave";
+            this.btnCycleSave.Size = new System.Drawing.Size(80, 25);
+            this.btnCycleSave.TabIndex = 4;
+            this.btnCycleSave.Text = "저장";
+            this.btnCycleSave.UseVisualStyleBackColor = true;
+            this.btnCycleSave.Click += new System.EventHandler(this.btnCycleSave_Click);
+            //
+            // btnCycleLoad
+            //
+            this.btnCycleLoad.Location = new System.Drawing.Point(95, 33);
+            this.btnCycleLoad.Name = "btnCycleLoad";
+            this.btnCycleLoad.Size = new System.Drawing.Size(80, 25);
+            this.btnCycleLoad.TabIndex = 5;
+            this.btnCycleLoad.Text = "불러오기";
+            this.btnCycleLoad.UseVisualStyleBackColor = true;
+            this.btnCycleLoad.Click += new System.EventHandler(this.btnCycleLoad_Click);
             //
             // btnCycleDown
             //
@@ -591,6 +615,8 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.Button btnCycleUp;
         private System.Windows.Forms.Button btnCycleDown;
         private System.Windows.Forms.Button btnCycleClear;
+        private System.Windows.Forms.Button btnCycleSave;
+        private System.Windows.Forms.Button btnCycleLoad;
         private System.Windows.Forms.ListBox lstCycle;
         private System.Windows.Forms.Panel pnlCycleBottom;
         private System.Windows.Forms.Label lblIterations;
