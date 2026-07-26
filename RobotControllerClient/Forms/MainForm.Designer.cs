@@ -51,6 +51,7 @@ namespace RobotControllerClient.Forms
             this.pnlLogBottom = new System.Windows.Forms.Panel();
             this.txtManual = new System.Windows.Forms.TextBox();
             this.btnManualSend = new System.Windows.Forms.Button();
+            this.btnManualAdd = new System.Windows.Forms.Button();
             this.btnLogClear = new System.Windows.Forms.Button();
             this.btnOpenLogFolder = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -486,6 +487,7 @@ namespace RobotControllerClient.Forms
             //
             this.pnlLogBottom.Controls.Add(this.txtManual);
             this.pnlLogBottom.Controls.Add(this.btnManualSend);
+            this.pnlLogBottom.Controls.Add(this.btnManualAdd);
             this.pnlLogBottom.Controls.Add(this.btnLogClear);
             this.pnlLogBottom.Controls.Add(this.btnOpenLogFolder);
             this.pnlLogBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -511,6 +513,16 @@ namespace RobotControllerClient.Forms
             this.btnManualSend.Text = "수동 전송";
             this.btnManualSend.UseVisualStyleBackColor = true;
             this.btnManualSend.Click += new System.EventHandler(this.btnManualSend_Click);
+            //
+            // btnManualAdd
+            //
+            this.btnManualAdd.Location = new System.Drawing.Point(255, 39);
+            this.btnManualAdd.Name = "btnManualAdd";
+            this.btnManualAdd.Size = new System.Drawing.Size(120, 27);
+            this.btnManualAdd.TabIndex = 4;
+            this.btnManualAdd.Text = "사이클에 추가";
+            this.btnManualAdd.UseVisualStyleBackColor = true;
+            this.btnManualAdd.Click += new System.EventHandler(this.btnManualAdd_Click);
             //
             // btnLogClear
             //
@@ -633,6 +645,7 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.Panel pnlLogBottom;
         private System.Windows.Forms.TextBox txtManual;
         private System.Windows.Forms.Button btnManualSend;
+        private System.Windows.Forms.Button btnManualAdd;
         private System.Windows.Forms.Button btnLogClear;
         private System.Windows.Forms.Button btnOpenLogFolder;
         private System.Windows.Forms.StatusStrip statusStrip;

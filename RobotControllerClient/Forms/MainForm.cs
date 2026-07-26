@@ -39,6 +39,10 @@ namespace RobotControllerClient.Forms
 
             BuildCommandButtons();
             UpdateConnectionUi(false);
+
+            _toolTip.SetToolTip(txtManual, "Enter: 바로 전송 / Shift+Enter: 사이클에 추가");
+            _toolTip.SetToolTip(btnManualSend, "입력한 명령을 로봇으로 바로 전송 (Enter)");
+            _toolTip.SetToolTip(btnManualAdd, "입력한 명령을 사이클 스텝으로 추가 (Shift+Enter)");
         }
 
         private void BuildCommandButtons()
@@ -249,12 +253,24 @@ namespace RobotControllerClient.Forms
             SendManual();
         }
 
+        private void btnManualAdd_Click(object sender, EventArgs e)
+        {
+            AddManualToCycle();
+        }
+
         private void txtManual_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 e.SuppressKeyPress = true;
-                SendManual();
+                if (e.Shift)
+                {
+                    AddManualToCycle();
+                }
+                else
+                {
+                    SendManual();
+                }
             }
         }
 
@@ -267,6 +283,53 @@ namespace RobotControllerClient.Forms
             }
             SendOnce(text);
             txtManual.Clear();
+        }
+
+        private void AddManualToCycle()
+        {
+            if (_cycle.IsRunning)
+            {
+                MessageBox.Show(this, "사이클 실행 중에는 추가할 수 없습니다.", "추가 불가", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string text = txtManual.Text.Trim();
+            if (text.Length == 0)
+            {
+                return;
+            }
+
+            AddStepToCycle(ResolveCommandId(text), text);
+            AppendLog(LogDirection.Info, string.Format("사이클에 추가: {0}", text));
+            txtManual.Clear();
+            txtManual.Focus();
+        }
+
+        private static string ResolveCommandId(string commandText)
+        {
+            string[] parts = (commandText ?? string.Empty)
+                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+            if (parts.Length == 0)
+            {
+                return "MANUAL";
+            }
+
+            string head = parts[0].ToUpperInvariant();
+            if (head == CommandCatalog.DelayCommandId)
+            {
+                return CommandCatalog.DelayCommandId;
+            }
+
+            foreach (CommandDefinition def in CommandCatalog.All)
+            {
+                if (def.Template != null &&
+                    def.Template.ToUpperInvariant().StartsWith(head))
+                {
+                    return def.Id;
+                }
+            }
+
+            return "MANUAL";
         }
 
         private void btnCycleRemove_Click(object sender, EventArgs e)
@@ -631,6 +694,7 @@ namespace RobotControllerClient.Forms
             btnCycleClear.Enabled = !running;
             btnCycleSave.Enabled = !running;
             btnCycleLoad.Enabled = !running;
+            btnManualAdd.Enabled = !running;
             numIterations.Enabled = !running && !chkInfinite.Checked;
             chkInfinite.Enabled = !running;
             chkStopOnError.Enabled = !running;
