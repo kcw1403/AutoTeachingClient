@@ -5,12 +5,19 @@ using RobotControllerClient.Protocol;
 
 namespace RobotControllerClient.Forms
 {
+    public enum CommandAction
+    {
+        Send,
+        AddToCycle
+    }
+
     public partial class CommandParamDialog : Form
     {
         private readonly CommandDefinition _definition;
         private readonly Dictionary<string, Control> _inputs = new Dictionary<string, Control>();
 
         public string ResultCommandText { get; private set; }
+        public CommandAction ResultAction { get; private set; }
 
         public CommandParamDialog(CommandDefinition definition)
         {
@@ -19,6 +26,13 @@ namespace RobotControllerClient.Forms
             Text = "파라미터 입력 - " + definition.DisplayName;
             BuildInputs();
             UpdatePreview();
+
+            if (definition.Id == CommandCatalog.DelayCommandId)
+            {
+                btnSend.Visible = false;
+                btnAddToCycle.Text = "확인";
+                AcceptButton = btnAddToCycle;
+            }
         }
 
         private void BuildInputs()
@@ -87,7 +101,17 @@ namespace RobotControllerClient.Forms
             txtPreview.Text = _definition.Build(CollectValues());
         }
 
-        private void btnOk_Click(object sender, EventArgs e)
+        private void btnSend_Click(object sender, EventArgs e)
+        {
+            Commit(CommandAction.Send);
+        }
+
+        private void btnAddToCycle_Click(object sender, EventArgs e)
+        {
+            Commit(CommandAction.AddToCycle);
+        }
+
+        private void Commit(CommandAction action)
         {
             foreach (KeyValuePair<string, Control> kv in _inputs)
             {
@@ -100,6 +124,7 @@ namespace RobotControllerClient.Forms
             }
 
             ResultCommandText = _definition.Build(CollectValues());
+            ResultAction = action;
             DialogResult = DialogResult.OK;
             Close();
         }

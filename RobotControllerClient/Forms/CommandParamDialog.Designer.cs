@@ -18,7 +18,8 @@ namespace RobotControllerClient.Forms
             this.pnlParams = new System.Windows.Forms.TableLayoutPanel();
             this.lblPreviewCaption = new System.Windows.Forms.Label();
             this.txtPreview = new System.Windows.Forms.TextBox();
-            this.btnOk = new System.Windows.Forms.Button();
+            this.btnAddToCycle = new System.Windows.Forms.Button();
+            this.btnSend = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             //
@@ -52,35 +53,46 @@ namespace RobotControllerClient.Forms
             this.txtPreview.TabIndex = 2;
             this.txtPreview.BackColor = System.Drawing.SystemColors.Info;
             //
-            // btnOk
+            // btnAddToCycle
             //
-            this.btnOk.Location = new System.Drawing.Point(266, 272);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(75, 28);
-            this.btnOk.TabIndex = 3;
-            this.btnOk.Text = "전송";
-            this.btnOk.UseVisualStyleBackColor = true;
-            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
+            this.btnAddToCycle.Location = new System.Drawing.Point(170, 272);
+            this.btnAddToCycle.Name = "btnAddToCycle";
+            this.btnAddToCycle.Size = new System.Drawing.Size(90, 28);
+            this.btnAddToCycle.TabIndex = 3;
+            this.btnAddToCycle.Text = "사이클 추가";
+            this.btnAddToCycle.UseVisualStyleBackColor = true;
+            this.btnAddToCycle.Click += new System.EventHandler(this.btnAddToCycle_Click);
+            //
+            // btnSend
+            //
+            this.btnSend.Location = new System.Drawing.Point(266, 272);
+            this.btnSend.Name = "btnSend";
+            this.btnSend.Size = new System.Drawing.Size(75, 28);
+            this.btnSend.TabIndex = 4;
+            this.btnSend.Text = "전송";
+            this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             //
             // btnCancel
             //
             this.btnCancel.Location = new System.Drawing.Point(347, 272);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 28);
-            this.btnCancel.TabIndex = 4;
+            this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "취소";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             //
             // CommandParamDialog
             //
-            this.AcceptButton = this.btnOk;
+            this.AcceptButton = this.btnSend;
             this.CancelButton = this.btnCancel;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 312);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.btnOk);
+            this.Controls.Add(this.btnSend);
+            this.Controls.Add(this.btnAddToCycle);
             this.Controls.Add(this.txtPreview);
             this.Controls.Add(this.lblPreviewCaption);
             this.Controls.Add(this.pnlParams);
@@ -97,7 +109,8 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.TableLayoutPanel pnlParams;
         private System.Windows.Forms.Label lblPreviewCaption;
         private System.Windows.Forms.TextBox txtPreview;
-        private System.Windows.Forms.Button btnOk;
+        private System.Windows.Forms.Button btnAddToCycle;
+        private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.Button btnCancel;
     }
 }

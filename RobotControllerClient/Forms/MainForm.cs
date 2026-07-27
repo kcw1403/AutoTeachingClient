@@ -120,7 +120,6 @@ namespace RobotControllerClient.Forms
         {
             CommandDefinition def = (CommandDefinition)((Button)sender).Tag;
 
-            string commandText;
             if (def.HasParameters)
             {
                 using (CommandParamDialog dialog = new CommandParamDialog(def))
@@ -129,15 +128,24 @@ namespace RobotControllerClient.Forms
                     {
                         return;
                     }
-                    commandText = dialog.ResultCommandText;
+                    ExecuteChoice(def, dialog.ResultCommandText, dialog.ResultAction);
                 }
+                return;
+            }
+
+            AskAddToCycleOrSend(def, def.Build(null));
+        }
+
+        private void ExecuteChoice(CommandDefinition def, string commandText, CommandAction action)
+        {
+            if (def.Id == CommandCatalog.DelayCommandId || action == CommandAction.AddToCycle)
+            {
+                AddStepToCycle(def.Id, commandText);
             }
             else
             {
-                commandText = def.Build(null);
+                SendOnce(commandText);
             }
-
-            AskAddToCycleOrSend(def, commandText);
         }
 
         private void AskAddToCycleOrSend(CommandDefinition def, string commandText)
