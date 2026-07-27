@@ -266,6 +266,7 @@ namespace RobotControllerClient.Controls
         {
             int rows = 4;
             using (Pen gridPen = new Pen(GridColor))
+            using (Pen zeroPen = new Pen(ZeroColor) { DashStyle = DashStyle.Dash })
             using (SolidBrush textBrush = new SolidBrush(MutedColor))
             using (StringFormat sf = new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center })
             {
@@ -274,10 +275,7 @@ namespace RobotControllerClient.Controls
                     double value = max - (max - min) * i / rows;
                     int y = plot.Top + (plot.Height * i / rows);
                     bool isZero = Math.Abs(value) < (max - min) * 1e-6;
-                    using (Pen linePen = isZero ? new Pen(ZeroColor) { DashStyle = DashStyle.Dash } : gridPen)
-                    {
-                        g.DrawLine(linePen, plot.Left, y, plot.Right, y);
-                    }
+                    g.DrawLine(isZero ? zeroPen : gridPen, plot.Left, y, plot.Right, y);
                     string label = value.ToString("0.###", CultureInfo.InvariantCulture);
                     g.DrawString(label, Font, textBrush,
                         new RectangleF(plot.Left - 56, y - 8, 52, 16), sf);
