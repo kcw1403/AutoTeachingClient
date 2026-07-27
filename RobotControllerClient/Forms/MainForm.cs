@@ -38,11 +38,46 @@ namespace RobotControllerClient.Forms
             _cycle.CycleStopped += Cycle_CycleStopped;
 
             BuildCommandButtons();
+            InitTerminatorCombo();
             UpdateConnectionUi(false);
 
             _toolTip.SetToolTip(txtManual, "Enter: 바로 전송 / Shift+Enter: 사이클에 추가");
             _toolTip.SetToolTip(btnManualSend, "입력한 명령을 로봇으로 바로 전송 (Enter)");
             _toolTip.SetToolTip(btnManualAdd, "입력한 명령을 사이클 스텝으로 추가 (Shift+Enter)");
+            _toolTip.SetToolTip(cmbTerminator, "명령 끝에 붙는 종결문자를 선택합니다.");
+        }
+
+        private sealed class TerminatorItem
+        {
+            public string Label { get; set; }
+            public LineTerminator Value { get; set; }
+            public override string ToString() { return Label; }
+        }
+
+        private void InitTerminatorCombo()
+        {
+            cmbTerminator.Items.Add(new TerminatorItem { Label = "CR (\\r)", Value = LineTerminator.Cr });
+            cmbTerminator.Items.Add(new TerminatorItem { Label = "CRLF (\\r\\n)", Value = LineTerminator.CrLf });
+            cmbTerminator.Items.Add(new TerminatorItem { Label = "LF (\\n)", Value = LineTerminator.Lf });
+            cmbTerminator.SelectedIndex = 0;
+            _terminatorReady = true;
+        }
+
+        private bool _terminatorReady;
+
+        private void cmbTerminator_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TerminatorItem item = cmbTerminator.SelectedItem as TerminatorItem;
+            if (item == null)
+            {
+                return;
+            }
+
+            _client.Terminator = item.Value;
+            if (_terminatorReady)
+            {
+                AppendLog(LogDirection.Info, string.Format("종결문자 변경: {0}", item.Label));
+            }
         }
 
         private void BuildCommandButtons()

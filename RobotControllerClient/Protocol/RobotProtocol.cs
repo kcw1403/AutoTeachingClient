@@ -2,9 +2,17 @@ using System.Text;
 
 namespace RobotControllerClient.Protocol
 {
+    public enum LineTerminator
+    {
+        Cr,
+        Lf,
+        CrLf
+    }
+
     public static class RobotProtocol
     {
         public const byte CR = 0x0D;
+        public const byte LF = 0x0A;
 
         public const string Ack = "_ACK";
         public const string Nak = "_NAK";
@@ -16,12 +24,32 @@ namespace RobotControllerClient.Protocol
 
         public static byte[] Frame(string command)
         {
+            return Frame(command, LineTerminator.Cr);
+        }
+
+        public static byte[] Frame(string command, LineTerminator terminator)
+        {
             string trimmed = (command ?? string.Empty).TrimEnd('\r', '\n');
             byte[] body = Encoding.GetBytes(trimmed);
-            byte[] framed = new byte[body.Length + 1];
+            byte[] suffix = TerminatorBytes(terminator);
+
+            byte[] framed = new byte[body.Length + suffix.Length];
             System.Array.Copy(body, framed, body.Length);
-            framed[body.Length] = CR;
+            System.Array.Copy(suffix, 0, framed, body.Length, suffix.Length);
             return framed;
+        }
+
+        public static byte[] TerminatorBytes(LineTerminator terminator)
+        {
+            switch (terminator)
+            {
+                case LineTerminator.Lf:
+                    return new[] { LF };
+                case LineTerminator.CrLf:
+                    return new[] { CR, LF };
+                default:
+                    return new[] { CR };
+            }
         }
 
         public static bool IsAck(string line)

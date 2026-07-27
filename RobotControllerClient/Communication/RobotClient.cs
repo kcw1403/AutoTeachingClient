@@ -39,6 +39,8 @@ namespace RobotControllerClient.Communication
 
         public int ResponseTimeoutMs { get; set; }
 
+        public LineTerminator Terminator { get; set; }
+
         public event EventHandler<CommEventArgs> Log;
         public event EventHandler<bool> ConnectionChanged;
 
@@ -50,6 +52,7 @@ namespace RobotControllerClient.Communication
         public RobotClient()
         {
             ResponseTimeoutMs = 30000;
+            Terminator = LineTerminator.Cr;
         }
 
         public void Connect(string host, int port)
@@ -118,7 +121,7 @@ namespace RobotControllerClient.Communication
                 throw new InvalidOperationException("연결되어 있지 않습니다.");
             }
 
-            byte[] frame = RobotProtocol.Frame(text);
+            byte[] frame = RobotProtocol.Frame(text, Terminator);
             lock (_sendLock)
             {
                 _stream.Write(frame, 0, frame.Length);

@@ -49,6 +49,8 @@ namespace RobotControllerClient.Forms
             this.grpLog = new System.Windows.Forms.GroupBox();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.pnlLogBottom = new System.Windows.Forms.Panel();
+            this.lblTerminator = new System.Windows.Forms.Label();
+            this.cmbTerminator = new System.Windows.Forms.ComboBox();
             this.txtManual = new System.Windows.Forms.TextBox();
             this.btnManualSend = new System.Windows.Forms.Button();
             this.btnManualAdd = new System.Windows.Forms.Button();
@@ -485,61 +487,82 @@ namespace RobotControllerClient.Forms
             //
             // pnlLogBottom
             //
+            this.pnlLogBottom.Controls.Add(this.lblTerminator);
+            this.pnlLogBottom.Controls.Add(this.cmbTerminator);
             this.pnlLogBottom.Controls.Add(this.txtManual);
             this.pnlLogBottom.Controls.Add(this.btnManualSend);
             this.pnlLogBottom.Controls.Add(this.btnManualAdd);
             this.pnlLogBottom.Controls.Add(this.btnLogClear);
             this.pnlLogBottom.Controls.Add(this.btnOpenLogFolder);
             this.pnlLogBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlLogBottom.Location = new System.Drawing.Point(6, 587);
+            this.pnlLogBottom.Location = new System.Drawing.Point(6, 559);
             this.pnlLogBottom.Name = "pnlLogBottom";
-            this.pnlLogBottom.Size = new System.Drawing.Size(432, 72);
+            this.pnlLogBottom.Size = new System.Drawing.Size(432, 100);
             this.pnlLogBottom.TabIndex = 0;
+            //
+            // lblTerminator
+            //
+            this.lblTerminator.AutoSize = true;
+            this.lblTerminator.Location = new System.Drawing.Point(3, 11);
+            this.lblTerminator.Name = "lblTerminator";
+            this.lblTerminator.Size = new System.Drawing.Size(57, 12);
+            this.lblTerminator.TabIndex = 0;
+            this.lblTerminator.Text = "종결문자";
+            //
+            // cmbTerminator
+            //
+            this.cmbTerminator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTerminator.FormattingEnabled = true;
+            this.cmbTerminator.Location = new System.Drawing.Point(66, 7);
+            this.cmbTerminator.Name = "cmbTerminator";
+            this.cmbTerminator.Size = new System.Drawing.Size(110, 20);
+            this.cmbTerminator.TabIndex = 1;
+            this.cmbTerminator.SelectedIndexChanged += new System.EventHandler(this.cmbTerminator_SelectedIndexChanged);
             //
             // txtManual
             //
-            this.txtManual.Location = new System.Drawing.Point(3, 8);
+            this.txtManual.Location = new System.Drawing.Point(3, 36);
             this.txtManual.Name = "txtManual";
             this.txtManual.Size = new System.Drawing.Size(330, 21);
-            this.txtManual.TabIndex = 0;
+            this.txtManual.TabIndex = 2;
             this.txtManual.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtManual_KeyDown);
             //
             // btnManualSend
             //
-            this.btnManualSend.Location = new System.Drawing.Point(339, 6);
+            this.btnManualSend.Location = new System.Drawing.Point(339, 34);
             this.btnManualSend.Name = "btnManualSend";
             this.btnManualSend.Size = new System.Drawing.Size(88, 25);
-            this.btnManualSend.TabIndex = 1;
+            this.btnManualSend.TabIndex = 3;
             this.btnManualSend.Text = "수동 전송";
             this.btnManualSend.UseVisualStyleBackColor = true;
             this.btnManualSend.Click += new System.EventHandler(this.btnManualSend_Click);
             //
             // btnManualAdd
             //
-            this.btnManualAdd.Location = new System.Drawing.Point(255, 39);
+            this.btnManualAdd.Location = new System.Drawing.Point(255, 67);
             this.btnManualAdd.Name = "btnManualAdd";
             this.btnManualAdd.Size = new System.Drawing.Size(120, 27);
-            this.btnManualAdd.TabIndex = 4;
+            this.btnManualAdd.TabIndex = 6;
             this.btnManualAdd.Text = "사이클에 추가";
             this.btnManualAdd.UseVisualStyleBackColor = true;
             this.btnManualAdd.Click += new System.EventHandler(this.btnManualAdd_Click);
             //
             // btnLogClear
             //
-            this.btnLogClear.Location = new System.Drawing.Point(3, 39);
+            this.btnLogClear.Location = new System.Drawing.Point(3, 67);
             this.btnLogClear.Name = "btnLogClear";
             this.btnLogClear.Size = new System.Drawing.Size(120, 27);
-            this.btnLogClear.TabIndex = 2;
+            this.btnLogClear.TabIndex = 4;
             this.btnLogClear.Text = "화면 로그 지우기";
             this.btnLogClear.UseVisualStyleBackColor = true;
             this.btnLogClear.Click += new System.EventHandler(this.btnLogClear_Click);
             //
             // btnOpenLogFolder
             //
-            this.btnOpenLogFolder.Location = new System.Drawing.Point(129, 39);
+            this.btnOpenLogFolder.Location = new System.Drawing.Point(129, 67);
             this.btnOpenLogFolder.Name = "btnOpenLogFolder";
             this.btnOpenLogFolder.Size = new System.Drawing.Size(120, 27);
-            this.btnOpenLogFolder.TabIndex = 3;
+            this.btnOpenLogFolder.TabIndex = 5;
             this.btnOpenLogFolder.Text = "로그 폴더 열기";
             this.btnOpenLogFolder.UseVisualStyleBackColor = true;
             this.btnOpenLogFolder.Click += new System.EventHandler(this.btnOpenLogFolder_Click);
@@ -643,6 +666,8 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.GroupBox grpLog;
         private System.Windows.Forms.ListBox lstLog;
         private System.Windows.Forms.Panel pnlLogBottom;
+        private System.Windows.Forms.Label lblTerminator;
+        private System.Windows.Forms.ComboBox cmbTerminator;
         private System.Windows.Forms.TextBox txtManual;
         private System.Windows.Forms.Button btnManualSend;
         private System.Windows.Forms.Button btnManualAdd;
