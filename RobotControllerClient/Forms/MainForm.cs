@@ -18,6 +18,7 @@ namespace RobotControllerClient.Forms
         private readonly RobotClient _client = new RobotClient();
         private readonly CommLogger _logger;
         private readonly CycleEngine _cycle;
+        private readonly TeachDiffStore _teachStore;
         private readonly List<CycleStep> _steps = new List<CycleStep>();
 
         private int _runningStepIndex = -1;
@@ -28,6 +29,7 @@ namespace RobotControllerClient.Forms
 
             _logger = new CommLogger(Path.Combine(Application.StartupPath, "logs"));
             _cycle = new CycleEngine(_client);
+            _teachStore = new TeachDiffStore(Path.Combine(Application.StartupPath, "logs", "teachdiff.tsv"));
 
             _client.Log += Client_Log;
             _client.ConnectionChanged += Client_ConnectionChanged;
@@ -254,10 +256,51 @@ namespace RobotControllerClient.Forms
                 if (TeachDiffer.TryParse(line, out differ))
                 {
                     teachChart.SetData(differ);
+
+                    int station, slot;
+                    string arm;
+                    ParseTeachTarget(result.CommandText, out station, out slot, out arm);
+                    _teachStore.Add(TeachDiffRecord.From(differ, station, slot, arm));
+
                     AppendLog(LogDirection.Info, string.Format(
-                        "TEACH_DIFFER 수신 - 편차 X:{0:0.000} Y:{1:0.000} Z:{2:0.000}",
-                        differ.DeviationX, differ.DeviationY, differ.DeviationZ));
+                        "TEACH_DIFFER 수신 (Stage {0}) - 편차 X:{1:0.000} Y:{2:0.000} Z:{3:0.000}",
+                        station, differ.DeviationX, differ.DeviationY, differ.DeviationZ));
                     return;
+                }
+            }
+        }
+
+        private static void ParseTeachTarget(string commandText, out int station, out int slot, out string arm)
+        {
+            station = 0;
+            slot = 0;
+            arm = string.Empty;
+
+            string[] parts = (commandText ?? string.Empty)
+                .Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            for (int i = 0; i < parts.Length; i++)
+            {
+                string token = parts[i].ToUpperInvariant();
+                if (i == 1 && parts[0].ToUpperInvariant().StartsWith("WAFEREYETEACH"))
+                {
+                    int st;
+                    if (int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out st))
+                    {
+                        station = st;
+                    }
+                }
+                else if (token == "SLOT" && i + 1 < parts.Length)
+                {
+                    int sl;
+                    if (int.TryParse(parts[i + 1], NumberStyles.Integer, CultureInfo.InvariantCulture, out sl))
+                    {
+                        slot = sl;
+                    }
+                }
+                else if (token == "ARM" && i + 1 < parts.Length)
+                {
+                    arm = parts[i + 1];
                 }
             }
         }
@@ -564,6 +607,14 @@ namespace RobotControllerClient.Forms
             catch (Exception ex)
             {
                 MessageBox.Show(this, "폴더를 열 수 없습니다: " + ex.Message, "오류", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnTeachHistory_Click(object sender, EventArgs e)
+        {
+            using (TeachTrendForm form = new TeachTrendForm(_teachStore))
+            {
+                form.ShowDialog(this);
             }
         }
 

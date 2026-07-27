@@ -46,6 +46,8 @@ namespace RobotControllerClient.Forms
             this.rightSplit = new System.Windows.Forms.SplitContainer();
             this.grpTeach = new System.Windows.Forms.GroupBox();
             this.teachChart = new RobotControllerClient.Controls.TeachDiffChart();
+            this.pnlTeachBottom = new System.Windows.Forms.Panel();
+            this.btnTeachHistory = new System.Windows.Forms.Button();
             this.grpLog = new System.Windows.Forms.GroupBox();
             this.lstLog = new System.Windows.Forms.ListBox();
             this.pnlLogBottom = new System.Windows.Forms.Panel();
@@ -78,6 +80,7 @@ namespace RobotControllerClient.Forms
             this.rightSplit.Panel2.SuspendLayout();
             this.rightSplit.SuspendLayout();
             this.grpTeach.SuspendLayout();
+            this.pnlTeachBottom.SuspendLayout();
             this.grpLog.SuspendLayout();
             this.pnlLogBottom.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -208,6 +211,7 @@ namespace RobotControllerClient.Forms
             // grpTeach
             //
             this.grpTeach.Controls.Add(this.teachChart);
+            this.grpTeach.Controls.Add(this.pnlTeachBottom);
             this.grpTeach.Dock = System.Windows.Forms.DockStyle.Fill;
             this.grpTeach.Location = new System.Drawing.Point(0, 0);
             this.grpTeach.Name = "grpTeach";
@@ -222,8 +226,28 @@ namespace RobotControllerClient.Forms
             this.teachChart.Dock = System.Windows.Forms.DockStyle.Fill;
             this.teachChart.Location = new System.Drawing.Point(6, 18);
             this.teachChart.Name = "teachChart";
-            this.teachChart.Size = new System.Drawing.Size(318, 641);
+            this.teachChart.Size = new System.Drawing.Size(318, 601);
             this.teachChart.TabIndex = 0;
+            //
+            // pnlTeachBottom
+            //
+            this.pnlTeachBottom.Controls.Add(this.btnTeachHistory);
+            this.pnlTeachBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlTeachBottom.Location = new System.Drawing.Point(6, 619);
+            this.pnlTeachBottom.Name = "pnlTeachBottom";
+            this.pnlTeachBottom.Size = new System.Drawing.Size(318, 40);
+            this.pnlTeachBottom.TabIndex = 1;
+            //
+            // btnTeachHistory
+            //
+            this.btnTeachHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnTeachHistory.Location = new System.Drawing.Point(0, 0);
+            this.btnTeachHistory.Name = "btnTeachHistory";
+            this.btnTeachHistory.Size = new System.Drawing.Size(318, 40);
+            this.btnTeachHistory.TabIndex = 0;
+            this.btnTeachHistory.Text = "편차 이력 보기 (Stage별 XYZ 트렌드)";
+            this.btnTeachHistory.UseVisualStyleBackColor = true;
+            this.btnTeachHistory.Click += new System.EventHandler(this.btnTeachHistory_Click);
             //
             // leftSplit
             //
@@ -623,6 +647,7 @@ namespace RobotControllerClient.Forms
             ((System.ComponentModel.ISupportInitialize)(this.rightSplit)).EndInit();
             this.rightSplit.ResumeLayout(false);
             this.grpTeach.ResumeLayout(false);
+            this.pnlTeachBottom.ResumeLayout(false);
             this.grpLog.ResumeLayout(false);
             this.pnlLogBottom.ResumeLayout(false);
             this.pnlLogBottom.PerformLayout();
@@ -663,6 +688,8 @@ namespace RobotControllerClient.Forms
         private System.Windows.Forms.SplitContainer rightSplit;
         private System.Windows.Forms.GroupBox grpTeach;
         private RobotControllerClient.Controls.TeachDiffChart teachChart;
+        private System.Windows.Forms.Panel pnlTeachBottom;
+        private System.Windows.Forms.Button btnTeachHistory;
         private System.Windows.Forms.GroupBox grpLog;
         private System.Windows.Forms.ListBox lstLog;
         private System.Windows.Forms.Panel pnlLogBottom;
