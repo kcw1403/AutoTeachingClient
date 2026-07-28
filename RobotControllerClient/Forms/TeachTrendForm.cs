@@ -22,6 +22,7 @@ namespace RobotControllerClient.Forms
         private DataGridView _grid;
         private FlowLayoutPanel _metricPanel;
         private Button _btnRefresh;
+        private Button _btnClear;
         private Label _lblSummary;
 
         private readonly CheckBox[] _metricChecks = new CheckBox[6];
@@ -83,11 +84,23 @@ namespace RobotControllerClient.Forms
             _btnRefresh.FlatAppearance.BorderColor = GridColor;
             _btnRefresh.Click += (s, e) => { LoadStations(); RefreshChart(); };
 
+            _btnClear = new Button
+            {
+                Text = "이력 삭제",
+                Location = new Point(322, 11),
+                Width = 84,
+                Height = 26,
+                FlatStyle = FlatStyle.Flat,
+                ForeColor = Color.FromArgb(240, 120, 120)
+            };
+            _btnClear.FlatAppearance.BorderColor = Color.FromArgb(120, 60, 60);
+            _btnClear.Click += BtnClear_Click;
+
             _lblSummary = new Label
             {
                 AutoSize = true,
                 ForeColor = Color.FromArgb(138, 146, 160),
-                Location = new Point(332, 16)
+                Location = new Point(422, 16)
             };
 
             _metricPanel = new FlowLayoutPanel
@@ -118,6 +131,7 @@ namespace RobotControllerClient.Forms
 
             top.Controls.Add(_lblSummary);
             top.Controls.Add(_btnRefresh);
+            top.Controls.Add(_btnClear);
             top.Controls.Add(_cmbStation);
             top.Controls.Add(lblStage);
             top.Controls.Add(_metricPanel);
@@ -248,6 +262,52 @@ namespace RobotControllerClient.Forms
             FillGrid(records);
 
             _lblSummary.Text = string.Format("Stage {0} · 이력 {1}건", item.Station, records.Count);
+        }
+
+        private void BtnClear_Click(object sender, EventArgs e)
+        {
+            StationItem item = _cmbStation.SelectedItem as StationItem;
+            if (item == null)
+            {
+                MessageBox.Show(this, "삭제할 이력이 없습니다.", "이력 삭제",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult choice = MessageBox.Show(
+                this,
+                string.Format(
+                    "편차 이력을 삭제합니다.\n\n[예] 현재 Stage {0} 이력만 삭제\n[아니오] 전체 Stage 이력 삭제\n[취소] 취소",
+                    item.Station),
+                "이력 삭제",
+                MessageBoxButtons.YesNoCancel,
+                MessageBoxIcon.Warning);
+
+            if (choice == DialogResult.Yes)
+            {
+                _store.ClearStation(item.Station);
+            }
+            else if (choice == DialogResult.No)
+            {
+                DialogResult confirm = MessageBox.Show(
+                    this,
+                    "모든 Stage의 편차 이력이 삭제됩니다. 계속하시겠습니까?",
+                    "전체 이력 삭제 확인",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Warning);
+                if (confirm != DialogResult.OK)
+                {
+                    return;
+                }
+                _store.Clear();
+            }
+            else
+            {
+                return;
+            }
+
+            LoadStations();
+            RefreshChart();
         }
 
         private void FillGrid(List<TeachDiffRecord> records)

@@ -94,6 +94,37 @@ namespace RobotControllerClient.Protocol
             }
         }
 
+        public void ClearStation(int station)
+        {
+            lock (_lock)
+            {
+                _records.RemoveAll(r => r.Station == station);
+                Rewrite();
+            }
+        }
+
+        private void Rewrite()
+        {
+            try
+            {
+                string dir = Path.GetDirectoryName(_path);
+                if (!string.IsNullOrEmpty(dir) && !Directory.Exists(dir))
+                {
+                    Directory.CreateDirectory(dir);
+                }
+
+                using (StreamWriter writer = new StreamWriter(_path, false, Encoding.UTF8))
+                {
+                    writer.WriteLine(Header);
+                    foreach (TeachDiffRecord r in _records)
+                    {
+                        writer.WriteLine(Serialize(r));
+                    }
+                }
+            }
+            catch { }
+        }
+
         private void AppendToFile(TeachDiffRecord record)
         {
             try
